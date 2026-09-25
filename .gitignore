@@ -1,0 +1,5 @@
+raw/*.png
+.vercel
+.DS_Store
+raw/*.pdf
+raw/questions.json
