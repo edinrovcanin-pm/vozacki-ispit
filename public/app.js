@@ -20,6 +20,12 @@ const CATS = [
   { k: 'T', label: 'T', sub: 'traktor' },
 ];
 
+// Broj pitanja na ispitu po kategoriji (B 40, C 50). PASS = udio tačnih za prolaz.
+const EXAM = { A: 40, B: 40, C: 50, D: 50, T: 40 };
+const PASS = 0.9;
+const COMPANY = { name: 'ABS-AS d.o.o.', address: 'Tvornička 3, 71210 Ilidža, BiH', jib: '4203579670005', founded: '3.2.2026.',
+  src: 'https://www.companywall.ba/firma/abs-as-doo/MMx6EwvfY' };
+
 const $app = document.getElementById('app');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -75,6 +81,7 @@ function route() {
   window.scrollTo(0, 0);
   if (parts[0] === 'vjezba') return startPractice(parts[1], params.get('red') === 'nasumicno');
   if (parts[0] === 'pogresni') return startWrong();
+  if (parts[0] === 'ispit') return startExam(EXAM[parts[1]] ? parts[1] : 'B');
   if (parts[0] === 'test') return startTest(+params.get('n') || 30);
   if (parts[0] === 'pregled') return renderBrowse(params);
   if (parts[0] === 'rezultat' && session && session.back) session = session.back;
@@ -88,7 +95,7 @@ function renderHome() {
   const all = pool();
   const s = stat(all);
   const wrong = all.filter(q => progress[q.id] === 0).length;
-  const testN = store.get('testN', 30);
+  const examCat = EXAM[cat] ? cat : store.get('examCat', 'B');
   $app.innerHTML = `
     <h1>Pripremi se za vozački ispit</h1>
     <p class="lead">Svih ${Q.length} pitanja iz zvaničnog kataloga Ministarstva za odgoj i obrazovanje KS — sa slikama iz dokumenta. Klikni odgovor i odmah vidiš da li je tačan.</p>
@@ -106,13 +113,17 @@ function renderHome() {
     <p class="note">Kategorija filtrira pitanja iz propisa (katalog označava za koje kategorije važe). Znakovi, raskrsnice i prva pomoć važe za sve.</p>
 
     <div class="panel test-cta" style="margin-top:22px">
-      <div><h3>Probni test</h3><p>Nasumična pitanja iz svih oblasti, rezultat na kraju.</p></div>
+      <div><h3>Simulacija ispita — možeš li položiti?</h3>
+        <p>${examCat} kategorija: ${EXAM[examCat]} nasumičnih pitanja iz svih oblasti. Za prolaz treba ${Math.ceil(EXAM[examCat] * PASS)} tačnih.</p></div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <div class="seg" role="group" aria-label="Broj pitanja">
-          ${[20, 30, 50].map(n => `<button data-n="${n}" aria-pressed="${n === testN}">${n}</button>`).join('')}
+        <div class="seg" role="group" aria-label="Kategorija ispita">
+          ${Object.keys(EXAM).map(k => `<button data-exam="${k}" aria-pressed="${k === examCat}">${k} · ${EXAM[k]}</button>`).join('')}
         </div>
-        <button class="btn big" id="startTest">Započni test →</button>
+        <button class="btn big" data-go="#/ispit/${examCat}">Počni ispit →</button>
       </div>
+    </div>
+    <div class="toolbar"><span class="note" style="align-self:center">Brzi test:</span>
+      ${[10, 20].map(n => `<button class="btn sm" data-go="#/test?n=${n}">${n} pitanja</button>`).join('')}
     </div>
 
     <h2>Vježbaj po oblastima</h2>
@@ -137,11 +148,27 @@ function renderHome() {
       <button class="btn" data-go="#/pogresni" ${wrong ? '' : 'disabled'}>↻ Ponovi pogrešne (${wrong})</button>
       <button class="btn" data-go="#/pregled">🔎 Pretraži sva pitanja</button>
       <button class="btn ghost" id="reset" ${s.g + s.r ? '' : 'disabled'}>Obriši napredak</button>
-    </div>`;
+    </div>
+
+    <h2>O nama</h2>
+    <section class="panel company">
+      <div class="co-logo" aria-hidden="true">ABS</div>
+      <div class="co-body">
+        <h3>${COMPANY.name}</h3>
+        <p class="note" style="margin:2px 0 12px">Portal za pripremu vozačkog ispita — vježbanje na zvaničnim pitanjima i simulacija ispita.</p>
+        <dl>
+          <div><dt>Adresa</dt><dd><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Tvornička 3, Ilidža')}" target="_blank" rel="noopener">${COMPANY.address}</a></dd></div>
+          <div><dt>JIB</dt><dd>${COMPANY.jib}</dd></div>
+          <div><dt>Osnovana</dt><dd>${COMPANY.founded}</dd></div>
+          <div><dt>Status</dt><dd><span class="pill-ok">Aktivna</span></dd></div>
+        </dl>
+        <p class="note" style="margin:10px 0 0">Izvor: <a href="${COMPANY.src}" target="_blank" rel="noopener">CompanyWall</a></p>
+      </div>
+    </section>`;
 
   $app.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { cat = b.dataset.cat; store.set('cat', cat); renderHome(); });
-  $app.querySelectorAll('[data-n]').forEach(b => b.onclick = () => { store.set('testN', +b.dataset.n); renderHome(); });
-  $app.querySelector('#startTest').onclick = () => go('#/test?n=' + store.get('testN', 30));
+  $app.querySelectorAll('[data-exam]').forEach(b => b.onclick = () => {
+    store.set('examCat', b.dataset.exam); cat = b.dataset.exam; store.set('cat', cat); renderHome(); });
   const r = $app.querySelector('#reset');
   r.onclick = () => { if (confirm('Obrisati sav napredak na ovom uređaju?')) { progress = {}; store.set('prog', progress); renderHome(); } };
 }
@@ -162,7 +189,11 @@ function startWrong() {
   session = { mode: 'practice', title: 'Ponavljanje pogrešnih', list, idx: 0, answers: {}, g: 0, r: 0 };
   renderQuestion();
 }
-function startTest(n) {
+function startExam(k) {
+  cat = k; store.set('cat', k); store.set('examCat', k);
+  startTest(EXAM[k], k);
+}
+function startTest(n, examCat) {
   // proportional mix across areas
   const areas = Object.keys(AREAS), all = pool();
   let picked = [];
@@ -171,7 +202,8 @@ function startTest(n) {
     picked.push(...shuffle(p).slice(0, k));
   }
   picked = shuffle(picked).slice(0, n);
-  session = { mode: 'test', title: `Probni test · ${picked.length} pitanja`, list: picked, idx: 0, answers: {}, done: false };
+  session = { mode: 'test', exam: examCat || null, title: examCat ? `Ispit · kategorija ${examCat}` : `Probni test · ${picked.length} pitanja`,
+    list: picked, idx: 0, answers: {}, done: false, started: Date.now() };
   renderQuestion();
 }
 
@@ -308,7 +340,7 @@ function renderPracticeDone() {
 }
 
 function finishTest() {
-  const s = session; s.done = true;
+  const s = session; s.done = true; s.finished = Date.now();
   s.results = s.list.map(q => {
     const ok = sameSet((s.answers[q.id] || { sel: [] }).sel, correctSet(q));
     record(q, ok); return ok;
@@ -322,12 +354,22 @@ function ring(f) {
 }
 function renderResult() {
   const s = session, g = s.results.filter(Boolean).length, n = s.list.length, f = g / n;
+  const need = Math.ceil(n * PASS), passed = g >= need;
+  const mins = Math.max(1, Math.round((s.finished - s.started) / 60000));
+  const byArea = Object.keys(AREAS).map(k => {
+    const idx = s.list.map((q, i) => q.area === k ? i : -1).filter(i => i >= 0);
+    return idx.length ? `<div class="stat"><b>${idx.filter(i => s.results[i]).length}/${idx.length}</b><span>${AREAS[k].short}</span></div>` : '';
+  }).join('');
   $app.innerHTML = `<div class="panel result">
+    ${s.exam ? `<div class="exam-badge ${passed ? 'ok' : 'bad'}">${passed ? '✓ POLOŽIO' : '✕ NIJE POLOŽIO'}</div>` : ''}
     ${ring(f)}
-    <div class="verdict ${f >= .9 ? 'ok' : 'bad'}">${f >= .9 ? 'Odlično, spreman si!' : f >= .7 ? 'Blizu si — još malo vježbe' : 'Treba još vježbe'}</div>
-    <p class="lead">${g} od ${n} tačno. Klikni pitanje da vidiš tačan odgovor.</p>
+    <div class="verdict ${passed ? 'ok' : 'bad'}">${s.exam
+      ? (passed ? `Čestitamo — položio bi ispit za kategoriju ${s.exam}!` : `Za prolaz fali još ${need - g} ${need - g === 1 ? 'tačan odgovor' : 'tačnih odgovora'}`)
+      : (passed ? 'Odlično, spreman si!' : f >= .7 ? 'Blizu si — još malo vježbe' : 'Treba još vježbe')}</div>
+    <p class="lead">${g} od ${n} tačno · potrebno ${need} · ${mins} min. Klikni pitanje da vidiš tačan odgovor.</p>
+    <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(90px,1fr));text-align:left">${byArea}</div>
     <div class="toolbar" style="justify-content:center">
-      <button class="btn primary" data-go="#/test?n=${n}&r=${Date.now()}">Novi test</button>
+      <button class="btn primary" data-go="${s.exam ? `#/ispit/${s.exam}?r=${Date.now()}` : `#/test?n=${n}&r=${Date.now()}`}">${s.exam ? 'Ponovi ispit' : 'Novi test'}</button>
       ${g < n ? '<button class="btn" data-go="#/pogresni">Vježbaj pogrešne</button>' : ''}
       <button class="btn" data-go="home">Početna</button>
     </div>
