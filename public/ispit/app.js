@@ -201,6 +201,11 @@ function startTest(n, examCat) {
     const p = pool(a); const k = Math.max(1, Math.round(n * p.length / all.length));
     picked.push(...shuffle(p).slice(0, k));
   }
+  // rounding per area can leave us short; top up from the rest of the pool
+  if (picked.length < n) {
+    const have = new Set(picked.map(q => q.id));
+    picked.push(...shuffle(all.filter(q => !have.has(q.id))).slice(0, n - picked.length));
+  }
   picked = shuffle(picked).slice(0, n);
   session = { mode: 'test', exam: examCat || null, title: examCat ? `Ispit · kategorija ${examCat}` : `Probni test · ${picked.length} pitanja`,
     list: picked, idx: 0, answers: {}, done: false, started: Date.now() };

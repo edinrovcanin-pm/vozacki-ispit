@@ -200,3 +200,6 @@ h2{font-size:18px;margin:28px 0 12px;letter-spacing:-.01em}
 .pill-ok{color:var(--ok)}
 .test-cta .seg{flex-wrap:wrap}
 @media (max-width:560px){.company{flex-direction:column}}
+
+.site-link{margin-left:auto;font-size:13px;font-weight:600;text-decoration:none;color:var(--muted);padding:8px 10px;border-radius:10px}
+.site-link:hover{color:var(--brand-2)}

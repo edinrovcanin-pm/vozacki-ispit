@@ -3,37 +3,209 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ABS-AS Vozački ispit</title>
-<meta name="description" content="Svih 769 zvaničnih testovnih pitanja za vozački ispit (Kanton Sarajevo) — vježbanje, probni test i pregled sa slikama iz kataloga.">
-<meta name="theme-color" content="#0b3d91">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M32 4 60 56H4z' fill='%23fff' stroke='%23d7261e' stroke-width='7' stroke-linejoin='round'/><text x='32' y='49' font-size='26' text-anchor='middle' font-family='Arial' font-weight='700'>!</text></svg>">
+<title>ABS-AS Autoškola</title>
+<meta name="description" content="ABS-AS d.o.o., Ilidža — obuka i priprema za vozački ispit za B i C kategoriju, uz besplatne online testove sa svih 769 zvaničnih pitanja.">
+<meta name="theme-color" content="#0a2a66">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230a2a66'/><text x='32' y='42' font-size='24' text-anchor='middle' font-family='Arial' font-weight='800' fill='%23ffc629'>ABS</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
-<header class="top">
-  <button class="brand" data-go="home" aria-label="Početna">
-    <span class="brand-mark" aria-hidden="true">
-      <svg viewBox="0 0 40 40"><path d="M20 3 37 34H3z" fill="#fff" stroke="#d7261e" stroke-width="4.5" stroke-linejoin="round"/><path d="M20 14v10" stroke="#111" stroke-width="3.4" stroke-linecap="round"/><circle cx="20" cy="29" r="2" fill="#111"/></svg>
-    </span>
-    <span><b>ABS-AS · Vozački ispit</b><small>Priprema i simulacija ispita · KS katalog</small></span>
-  </button>
-  <button class="theme-btn" id="themeBtn" aria-label="Promijeni temu">◐</button>
+
+<header class="nav" id="top">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label="ABS-AS početna">
+      <span class="logo-mark">ABS</span>
+      <span class="logo-t"><b>ABS-AS</b><small>autoškola · Ilidža</small></span>
+    </a>
+    <nav class="links" id="links">
+      <a href="#kategorije">Kategorije</a>
+      <a href="#put">Put do vozačke</a>
+      <a href="#online">Online testovi</a>
+      <a href="#pitanja">Pitanja</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a class="btn btn-y nav-cta" href="#kontakt">Upiši se</a>
+    <button class="burger" id="burger" aria-label="Meni" aria-expanded="false"><span></span><span></span></button>
+  </div>
 </header>
 
-<main id="app" tabindex="-1"></main>
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="road" aria-hidden="true"></div>
+    <div class="wrap hero-in">
+      <div class="hero-copy">
+        <span class="eyebrow">Autoškola ABS-AS · Tvornička 3, Ilidža</span>
+        <h1>Tvoj put do <span class="hl">vozačke dozvole</span> počinje ovdje.</h1>
+        <p class="sub">Obuka za <b>B</b> i <b>C</b> kategoriju, od teorije i prve pomoći do praktične vožnje i ispita. Uz to dobijaš i besplatne online testove sa svim zvaničnim pitanjima.</p>
+        <div class="hero-cta">
+          <a class="btn btn-y btn-lg" href="#kontakt">Upiši se u autoškolu</a>
+          <a class="btn btn-ghost btn-lg" href="/ispit/">Probaj online test →</a>
+        </div>
+        <ul class="hero-facts">
+          <li><b>769</b><span>zvaničnih pitanja</span></li>
+          <li><b>B · C</b><span>kategorije</span></li>
+          <li><b>24/7</b><span>online vježbanje</span></li>
+        </ul>
+      </div>
 
-<div class="lightbox" id="lightbox" hidden>
-  <button class="lb-close" aria-label="Zatvori">✕</button>
-  <img alt="">
-</div>
+      <a class="hero-card" href="/ispit/#/ispit/B" aria-label="Otvori simulaciju ispita">
+        <div class="hc-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="hc-t">Ispit · kategorija B</span><span class="hc-n">12 / 40</span></div>
+        <div class="hc-prog"><i style="width:30%"></i></div>
+        <div class="hc-img"><img src="/ispit/img/o3-001.webp" alt="Primjer slike iz kataloga: raskrsnica sa putanjama 1 i 2"></div>
+        <p class="hc-q">Kojom putanjom vozač motocikla mora izvršiti radnju skretanja ulijevo?</p>
+        <div class="hc-opt"><span>1</span>putanjom broj 2</div>
+        <div class="hc-opt ok"><span>✓</span>putanjom broj 1<em>tačno</em></div>
+        <div class="hc-foot">Isprobaj odmah, bez registracije →</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- KATEGORIJE -->
+  <section class="sec" id="kategorije">
+    <div class="wrap">
+      <div class="sec-h">
+        <span class="eyebrow dark">Kategorije</span>
+        <h2>Za šta te spremamo</h2>
+        <p>Izaberi kategoriju. Kroz cijelu obuku ide s tobom i online priprema za teorijski ispit.</p>
+      </div>
+      <div class="cats">
+        <article class="cat">
+          <div class="cat-ico" aria-hidden="true">
+            <svg viewBox="0 0 64 40"><path d="M8 28h48v-6l-6-2-8-9H22l-8 9-6 2z" fill="#0a2a66"/><path d="M24 13h9v8H18zM36 13h6l6 8H36z" fill="#cfe0ff"/><circle cx="18" cy="30" r="5.5" fill="#111"/><circle cx="46" cy="30" r="5.5" fill="#111"/><circle cx="18" cy="30" r="2" fill="#ccc"/><circle cx="46" cy="30" r="2" fill="#ccc"/></svg>
+          </div>
+          <div class="cat-l">B</div>
+          <h3>Putnički automobil</h3>
+          <p>Najtraženija kategorija za auto do 3.500 kg. Zakon, znakovi, raskrsnice, prva pomoć i vožnja u stvarnom saobraćaju.</p>
+          <ul><li>Teorija i online testovi</li><li>Prva pomoć</li><li>Praktična vožnja</li></ul>
+          <div class="cat-f"><span>Online ispit: <b>40 pitanja</b></span><a href="/ispit/#/ispit/B">Vježbaj B →</a></div>
+        </article>
+        <article class="cat">
+          <div class="cat-ico" aria-hidden="true">
+            <svg viewBox="0 0 64 40"><rect x="4" y="8" width="34" height="20" rx="2" fill="#0a2a66"/><path d="M38 14h12l8 8v6H38z" fill="#ffc629"/><path d="M42 16h7l5 6H42z" fill="#cfe0ff"/><circle cx="14" cy="31" r="5.5" fill="#111"/><circle cx="48" cy="31" r="5.5" fill="#111"/><circle cx="14" cy="31" r="2" fill="#ccc"/><circle cx="48" cy="31" r="2" fill="#ccc"/></svg>
+          </div>
+          <div class="cat-l">C</div>
+          <h3>Teretno vozilo / kamion</h3>
+          <p>Za profesionalne vozače i sve kojima treba kamion. Pored B gradiva ide i gradivo samo za teretna vozila.</p>
+          <ul><li>Propisi za teretna vozila</li><li>Online testovi po kategoriji</li><li>Praktična obuka</li></ul>
+          <div class="cat-f"><span>Online ispit: <b>50 pitanja</b></span><a href="/ispit/#/ispit/C">Vježbaj C →</a></div>
+        </article>
+        <article class="cat cat-ask">
+          <h3>Druga kategorija?</h3>
+          <p>Zanimaju te uslovi, termini ili neka druga kategorija? Dođi u Tvorničku 3 na Ilidži i sve ćemo ti objasniti.</p>
+          <a class="btn btn-dark" href="#kontakt">Kontaktiraj nas</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUT DO VOZAČKE -->
+  <section class="sec sec-alt" id="put">
+    <div class="wrap">
+      <div class="sec-h">
+        <span class="eyebrow dark">Kako izgleda obuka</span>
+        <h2>Put do vozačke u 5 koraka</h2>
+      </div>
+      <ol class="steps">
+        <li><span class="st-n">1</span><h3>Upis</h3><p>Dođeš u autoškolu, dogovorimo kategoriju i termine koji ti odgovaraju.</p></li>
+        <li><span class="st-n">2</span><h3>Teorija</h3><p>Propisi, saobraćajni znakovi i raskrsnice. Kod kuće vježbaš na <a href="/ispit/">online testovima</a>.</p></li>
+        <li><span class="st-n">3</span><h3>Prva pomoć</h3><p>Obuka i ispit iz prve pomoći. I za to postoji cijela oblast pitanja na portalu.</p></li>
+        <li><span class="st-n">4</span><h3>Vožnja</h3><p>Praktična obuka uz instruktora, od poligona do gradskog saobraćaja.</p></li>
+        <li><span class="st-n">5</span><h3>Ispit</h3><p>Izlaziš na ispit spreman, jer si ga prije toga već „položio" u simulaciji.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ONLINE TESTOVI (feature) -->
+  <section class="sec online" id="online">
+    <div class="wrap online-in">
+      <div>
+        <span class="eyebrow">Besplatno za sve polaznike i posjetioce</span>
+        <h2>Online testovi: provjeri možeš li položiti</h2>
+        <p class="sub">Imamo sva zvanična testovna pitanja iz kataloga Ministarstva za odgoj i obrazovanje KS, sa originalnim slikama iz dokumenta. Klikneš odgovor i odmah vidiš je li tačan.</p>
+        <ul class="feat">
+          <li><b>Simulacija ispita.</b> 40 pitanja za B, 50 za C, a na kraju piše „položio" ili „nije položio".</li>
+          <li><b>Vježba po oblastima.</b> Propisi (450), znakovi (109), raskrsnice (110) i prva pomoć (100).</li>
+          <li><b>Ponavljanje grešaka.</b> Portal pamti na čemu si pogriješio i vraća ti ta pitanja.</li>
+          <li><b>Radi na mobitelu.</b> Bez registracije, a napredak se čuva na tvom uređaju.</li>
+        </ul>
+        <div class="hero-cta">
+          <a class="btn btn-y btn-lg" href="/ispit/#/ispit/B">Počni ispit za B</a>
+          <a class="btn btn-ghost btn-lg" href="/ispit/#/ispit/C">Ispit za C</a>
+        </div>
+      </div>
+      <div class="gallery" aria-hidden="true">
+        <img src="/ispit/img/o2-002.webp" alt="">
+        <img src="/ispit/img/o3-002.webp" alt="">
+        <img src="/ispit/img/o2-004.webp" alt="">
+        <img src="/ispit/img/o3-005.webp" alt="">
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" id="pitanja">
+    <div class="wrap narrow">
+      <div class="sec-h">
+        <span class="eyebrow dark">Česta pitanja</span>
+        <h2>Imaš pitanje?</h2>
+      </div>
+      <div class="faq">
+        <details open><summary>Da li su pitanja na portalu ista kao na ispitu?</summary>
+          <p>Da. Pitanja su preuzeta iz zvaničnih kataloga testovnih pitanja koje je objavilo Ministarstvo za odgoj i obrazovanje Kantona Sarajevo (jul 2024), zajedno sa slikama iz dokumenta.</p></details>
+        <details><summary>Koliko pitanja ima simulacija ispita?</summary>
+          <p>Za B kategoriju 40 pitanja, a za C kategoriju 50. Pitanja se biraju nasumično iz sve četiri oblasti, pa je svaki pokušaj drugačiji.</p></details>
+        <details><summary>Moram li biti upisan u autoškolu da koristim testove?</summary>
+          <p>Ne. Online testovi su besplatni i otvoreni za sve, a ne treba ni registracija. Kad budeš spreman za obuku i vožnju, javi nam se.</p></details>
+        <details><summary>Da li se moj napredak čuva?</summary>
+          <p>Da, u browseru na uređaju na kojem vježbaš. Portal pamti šta si tačno uradio, a pogrešna pitanja ti nudi da ponoviš.</p></details>
+        <details><summary>Gdje se nalazite?</summary>
+          <p>Tvornička 3, 71210 Ilidža. Mapa je u dnu stranice.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section class="sec contact" id="kontakt">
+    <div class="wrap contact-in">
+      <div class="contact-card">
+        <span class="eyebrow">Kontakt i upis</span>
+        <h2>Dođi, upiši se i kreni</h2>
+        <p class="sub">Za upis, termine i sve informacije o obuci posjeti nas na adresi:</p>
+        <dl class="co">
+          <div><dt>Firma</dt><dd>ABS-AS d.o.o.</dd></div>
+          <div><dt>Adresa</dt><dd><a href="https://www.google.com/maps/search/?api=1&query=Tvorni%C4%8Dka%203%2C%2071210%20Ilid%C5%BEa" target="_blank" rel="noopener">Tvornička 3, 71210 Ilidža, BiH</a></dd></div>
+          <div><dt>JIB</dt><dd>4203579670005</dd></div>
+          <div><dt>Osnovana</dt><dd>3.2.2026.</dd></div>
+        </dl>
+        <div class="hero-cta">
+          <a class="btn btn-y btn-lg" href="https://www.google.com/maps/dir/?api=1&destination=Tvorni%C4%8Dka%203%2C%2071210%20Ilid%C5%BEa" target="_blank" rel="noopener">Navigacija do nas</a>
+          <a class="btn btn-ghost btn-lg" href="/ispit/">Online testovi</a>
+        </div>
+      </div>
+      <div class="map">
+        <iframe title="Mapa: Tvornička 3, Ilidža" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Tvorni%C4%8Dka%203%2C%2071210%20Ilid%C5%BEa&z=15&output=embed"></iframe>
+      </div>
+    </div>
+  </section>
+</main>
 
 <footer class="foot">
-  Pitanja i slike: <a href="https://mo.ks.gov.ba/node/17469" target="_blank" rel="noopener">Ministarstvo za odgoj i obrazovanje KS — Katalozi testovnih pitanja</a> (jul 2024).
-  Portal: ABS-AS d.o.o., Tvornička 3, 71210 Ilidža.
+  <div class="wrap foot-in">
+    <div class="logo"><span class="logo-mark">ABS</span><span class="logo-t"><b>ABS-AS d.o.o.</b><small>Tvornička 3, 71210 Ilidža · JIB 4203579670005</small></span></div>
+    <p>Testovna pitanja: <a href="https://mo.ks.gov.ba/node/17469" target="_blank" rel="noopener">Ministarstvo za odgoj i obrazovanje KS</a>. © <span id="y">2026</span> ABS-AS</p>
+  </div>
 </footer>
-<script src="app.js"></script>
+
+<script>
+  const b = document.getElementById('burger'), l = document.getElementById('links');
+  b.onclick = () => { const o = l.classList.toggle('open'); b.setAttribute('aria-expanded', o); };
+  l.querySelectorAll('a').forEach(a => a.onclick = () => { l.classList.remove('open'); b.setAttribute('aria-expanded', false); });
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
