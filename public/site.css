@@ -86,7 +86,7 @@ img{max-width:100%;display:block}
 .sec-h h2{font-size:clamp(28px,4vw,42px)}
 .sec-h p{color:var(--muted);font-size:17px;margin:12px 0 0}
 
-.cats{display:grid;grid-template-columns:1fr 1fr .8fr;gap:18px}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .cat{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
 .cat-ico{width:92px;height:58px;margin-bottom:14px}
 .cat-ico svg{width:100%;height:100%}
@@ -152,7 +152,6 @@ img{max-width:100%;display:block}
   .hero-in,.online-in,.contact-in{grid-template-columns:1fr}
   .hero-card{max-width:440px;transform:none}
   .cats{grid-template-columns:1fr 1fr}
-  .cat-ask{grid-column:1/-1}
   .steps{grid-template-columns:1fr 1fr}
   .steps li::after{display:none}
 }

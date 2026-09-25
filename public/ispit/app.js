@@ -15,13 +15,15 @@ const CATS = [
   { k: 'sve', label: 'Sve kategorije' },
   { k: 'A', label: 'A', sub: 'motocikl' },
   { k: 'B', label: 'B', sub: 'automobil' },
-  { k: 'C', label: 'C', sub: 'teretno' },
-  { k: 'D', label: 'D', sub: 'autobus' },
-  { k: 'T', label: 'T', sub: 'traktor' },
+  { k: 'C1', label: 'C1', sub: 'kamion do 7,5 t' },
+  { k: 'C', label: 'C', sub: 'kamion' },
+  { k: 'CE', label: 'CE', sub: 'kamion s prikolicom' },
 ];
+// Katalog označava samo A, B, C, D, T; C1 i CE su podkategorije/izvedenice C pa koriste C pitanja.
+const QCAT = { C1: 'C', CE: 'C' };
 
 // Broj pitanja na ispitu po kategoriji (B 40, C 50). PASS = udio tačnih za prolaz.
-const EXAM = { A: 40, B: 40, C: 50, D: 50, T: 40 };
+const EXAM = { A: 40, B: 40, C1: 50, C: 50, CE: 50 };
 const PASS = 0.9;
 const COMPANY = { name: 'ABS-AS d.o.o.', address: 'Tvornička 3, 71210 Ilidža, BiH', jib: '4203579670005', founded: '3.2.2026.',
   src: 'https://www.companywall.ba/firma/abs-as-doo/MMx6EwvfY' };
@@ -37,6 +39,7 @@ const store = {
 
 let Q = [], byId = {};
 let cat = store.get('cat', 'sve');
+if (cat !== 'sve' && !CATS.some(c => c.k === cat)) cat = 'sve';
 let progress = store.get('prog', {}); // id -> 1 correct / 0 wrong (last attempt)
 let session = null;
 
@@ -55,7 +58,7 @@ const openImg = src => { lb.querySelector('img').src = src; lb.hidden = false; }
 lb.onclick = () => { lb.hidden = true; };
 
 // ---------- data helpers ----------
-const inCat = q => cat === 'sve' || !q.cat || q.cat.includes(cat);
+const inCat = q => cat === 'sve' || !q.cat || q.cat.includes(QCAT[cat] || cat);
 const pool = area => Q.filter(q => (!area || q.area === area) && inCat(q));
 const correctSet = q => q.a.map((a, i) => a.ok ? i : -1).filter(i => i >= 0);
 const isMulti = q => correctSet(q).length > 1;
@@ -95,7 +98,7 @@ function renderHome() {
   const all = pool();
   const s = stat(all);
   const wrong = all.filter(q => progress[q.id] === 0).length;
-  const examCat = EXAM[cat] ? cat : store.get('examCat', 'B');
+  const examCat = EXAM[cat] ? cat : EXAM[store.get('examCat', 'B')] ? store.get('examCat', 'B') : 'B';
   $app.innerHTML = `
     <h1>Pripremi se za vozački ispit</h1>
     <p class="lead">Svih ${Q.length} pitanja iz zvaničnog kataloga Ministarstva za odgoj i obrazovanje KS — sa slikama iz dokumenta. Klikni odgovor i odmah vidiš da li je tačan.</p>
