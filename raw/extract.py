@@ -1,4 +1,15 @@
-import fitz, re, json, os
+import fitz, re, json, os, io
+from PIL import Image, ImageFilter
+
+def save_up(pix, path, native=True):
+    im=Image.open(io.BytesIO(pix.tobytes('png'))).convert('RGB')
+    if native:
+        f=max(1,min(5,1100/max(im.width,1)))
+        if f>1.05:
+            im=im.resize((round(im.width*f),round(im.height*f)),Image.LANCZOS)
+            im=im.filter(ImageFilter.UnsharpMask(radius=2,percent=120,threshold=2))
+    im.save(path,'WEBP',quality=90,method=6)
+    return im.size
 OUT='../public/img'; os.makedirs(OUT,exist_ok=True)
 AREAS={'o1':'Poznavanje propisa o sigurnosti saobraćaja','o2':'Saobraćajni znakovi','o3':'Saobraćajne situacije (raskrsnice)','o4':'Prva pomoć'}
 
@@ -86,18 +97,18 @@ def parse_main(key):
             u=fitz.Rect(q['imgs'][0][1])
             for _,r,_p in q['imgs'][1:]: u|=r
             pg=doc[q['imgs'][0][2]]
-            pix=pg.get_pixmap(clip=u+(-4,-4,4,4),dpi=220)
-            fn=f"{key}-{q['n']:03d}.jpg"; pix.save(os.path.join(OUT,fn),jpg_quality=85)
-            imgs.append(dict(src='img/'+fn,w=pix.width,h=pix.height)); q['imgs']=[]
+            pix=pg.get_pixmap(clip=u+(-4,-4,4,4),dpi=600)
+            fn=f"{key}-{q['n']:03d}.webp"; w,h=save_up(pix,os.path.join(OUT,fn),native=False)
+            imgs.append(dict(src='img/'+fn,w=w,h=h)); q['imgs']=[]
         for i,(xref,r,_p) in enumerate(q['imgs']):
-            fn=f"{key}-{q['n']:03d}{'' if i==0 else '-'+str(i)}.jpg"
+            fn=f"{key}-{q['n']:03d}{'' if i==0 else '-'+str(i)}.webp"
             pix=fitz.Pixmap(doc,xref)
             if pix.alpha or pix.n>3:
                 pix=fitz.Pixmap(fitz.csRGB,pix) if pix.colorspace and pix.colorspace.n!=3 else pix
                 if pix.alpha: pix=fitz.Pixmap(pix,0)
             if pix.colorspace is None or pix.colorspace.n!=3: pix=fitz.Pixmap(fitz.csRGB,pix)
-            pix.save(os.path.join(OUT,fn),jpg_quality=85) if hasattr(pix,'save') else None
-            imgs.append(dict(src='img/'+fn,w=pix.width,h=pix.height,ar=round(r.width/r.height,3)))
+            w,h=save_up(pix,os.path.join(OUT,fn))
+            imgs.append(dict(src='img/'+fn,w=w,h=h))
         cats=[c for c in re.split(r'[,\s]+',q['cats'].split('-')[0]) if c in ('A','B','C','D','T')]
         cats=list(dict.fromkeys(cats))
         out.append(dict(id=f"{key}-{q['n']}",area=key,n=q['n'],page=q['page'],q=qtext,a=answers,cat=cats,img=imgs,multi=('više tačnih' in qtext) or sum(a['ok'] for a in answers)>1))
